@@ -1,5 +1,6 @@
 import sqlite3 as lite 
 
+# fazendo uma conexão com o  db
 con = lite.connect('dados.db')
 
 # criando tabela categoria
