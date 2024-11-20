@@ -5,7 +5,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from tkinter.ttk import Progressbar 
-
+from tkcalendar import calendar_, DateEntry
+from datetime import date
 
 co0 = "#2e2d2b"
 co1 = "#feffff"
@@ -42,18 +43,7 @@ img = img.resize((45, 45))
 app_img = ImageTk.PhotoImage(img)
 
 label_img = Label(
-    frameCima, 
-    image=app_img, 
-    text="Orçamento Pessoal", 
-    width= 900, 
-    compound= LEFT, 
-    padx=5, 
-    relief= RAISED, 
-    anchor= NW, 
-    font=('Verdana 20 bold'), 
-    bg=co1 , 
-    fg=co4
-    )
+    frameCima, image=app_img, text="Orçamento Pessoal", width= 900, compound= LEFT, padx=5, relief= RAISED, anchor= NW, font=('Verdana 20 bold'), bg=co1 , fg=co4)
 label_img.place(x=0, y=0) 
 
 frameMeio = Frame(janela, width= 1043, height=361, bg=co1, pady=20, relief="raised")
@@ -191,13 +181,11 @@ def mostrar_renda():
 
     lista_itens = [[0,2,3,4],[0,2,3,4],[0,2,3,4],[0,2,3,4]]
     
-    global tree
+    global tree  #definindo tree globalmente 
 
-    tree = ttk.Treeview(frame_renda, selectmode="extended",columns=tabela_head, show="headings")
-    #vertical scrollbar
-    vsb = ttk.Scrollbar(frame_renda, orient="vertical", command=tree.yview)
-    #horizontal scrollbar
-    hsb = ttk.Scrollbar(frame_renda, orient="horizontal", command=tree.xview)
+    tree = ttk.Treeview(frame_renda, selectmode="extended",columns=tabela_head, show="headings") 
+    vsb = ttk.Scrollbar(frame_renda, orient="vertical", command=tree.yview)   # vertical scrollbar
+    hsb = ttk.Scrollbar(frame_renda, orient="horizontal", command=tree.xview) # horizontal scrollbar
 
     tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
 
@@ -205,7 +193,7 @@ def mostrar_renda():
     vsb.grid(column=1, row=0, sticky='ns')
     hsb.grid(column=0, row=1, sticky='ew')
 
-    hd=["center","center","center", "center"]
+    hd=["center","center","center", "center"]  # configuracao dos nomes das colunas
     h=[30,100,100,100]
     n=0
 
@@ -218,6 +206,45 @@ def mostrar_renda():
     for item in lista_itens:
         tree.insert('', 'end', values=item)
 mostrar_renda()
+
+l_info = Label(frame_operacoes, text='Insira novas despesas', height=1, anchor= NW, font= ("verdana 12 bold"), bg=co1, fg=co4)
+l_info.place(x=10, y=10)
+
+l_categoria = Label(frame_operacoes, text='Categoria', height=1, anchor=NW, font=("ivy 10"), bg=co1, fg=co4)
+l_categoria.place(x=10, y=40)
+
+l_data = Label(frame_operacoes, text='Data', height=1, anchor=NW, font=("ivy 10"), bg=co1, fg=co4)
+l_data.place(x=10, y=80)
+
+l_quantia = Label(frame_operacoes, text='Quantia(R$)', height=1, anchor=NW, font=("ivy 10"), bg=co1, fg=co4)
+l_quantia.place(x=10, y=120)
+
+categoria_funcao = ['viagem', 'Saúde']
+categoria= []
+for i in categoria_funcao:
+    categoria.append(i[1])  #pegando apenas valores exceto 'id
+
+# configuracao do combobox 
+combo_categoria =ttk.Combobox(frame_operacoes, width=10, font= ('ivy 10'))
+combo_categoria['values'] = (categoria)
+combo_categoria.place(x=110, y=41)
+
+combo_data =DateEntry(frame_operacoes, width=12, background='darkblue', foreground='white', borderwidth=2, year=2024)
+combo_data.place(x=110, y=80)
+
+combo_quantia = Entry(frame_operacoes, width=14, justify='left', relief='solid')
+combo_quantia.place(x=110, y=120)
+
+#botao adicionar
+icon_add = Image.open('add.png')
+icon_add = img.resize((17, 17))
+icon_add = ImageTk.PhotoImage(icon_add)
+
+btn_add = Button(frame_operacoes, image=icon_add, text="Adicionar".upper(), width= 80, compound= LEFT, anchor= NW, font=('Ivy 7 bold'), bg=co1 , fg=co0, overrelief=RIDGE)
+btn_add.place(x=110, y=160)
+
+
+
 
 
 janela.mainloop()
