@@ -44,7 +44,7 @@ app_img = ImageTk.PhotoImage(img)
 label_img = Label(
     frameCima, 
     image=app_img, 
-    text="Orçamento pessoal", 
+    text="Orçamento Pessoal", 
     width= 900, 
     compound= LEFT, 
     padx=5, 
@@ -54,10 +54,7 @@ label_img = Label(
     bg=co1 , 
     fg=co4
     )
-
 label_img.place(x=0, y=0) 
-
-
 
 frameMeio = Frame(janela, width= 1043, height=361, bg=co1, pady=20, relief="raised")
 frameMeio.grid(row=1, column=0, pady=1, padx=0, sticky= NSEW)
@@ -68,12 +65,17 @@ frameBaixo.grid(row=2, column=0, pady=0, padx=10, sticky= NSEW)
 frame_rosca = Frame(frameMeio, width=580, height=250, bg=co2)
 frame_rosca.place(x=415,y=5)
 
-# repanrtindo frames de baixo
-#frame_lista = Frame(janela)
+frame_renda = Frame(frameBaixo, width=300, height=250, bg=co1)
+frame_renda.grid(row=0, column=0)
 
+frame_operacoes = Frame(frameBaixo, width=220, height=250, bg=co1)
+frame_operacoes.grid(row=0, column=1, padx=5)
+
+frame_conf = Frame(frameBaixo, width=220, height=250, bg=co1)
+frame_conf.grid(row=0, column= 2, padx=5)
 
 def porcentagem():
-    l_nome = Label(frameMeio, text= "porcentagem da receita gasta", height=1, anchor=NW, font=("verdana 12"), bg= co1, fg= co4)
+    l_nome = Label(frameMeio, text= "porcentagem da receita gasta".upper(), height=1, anchor=NW, font=("verdana 12"), bg= co1, fg= co4)
     l_nome.place(x=7, y=5)
 
     style = ttk.Style()
@@ -169,8 +171,53 @@ def grafico_rosca():
     ax.pie(lista_valores, explode=explode, wedgeprops=dict(width=0.2), autopct='%1.1f%%', colors=colors,shadow=True, startangle=90)
     ax.legend(lista_categorias, loc="center right", bbox_to_anchor=(1.55, 0.50))
 
-    canva_categoria = FigureCanvasTkAgg(figura, frame_graf)
+    canva_categoria = FigureCanvasTkAgg(figura, frame_rosca)
     canva_categoria.get_tk_widget().grid(row=0, column=0)
 grafico_rosca()
+
+label_title = Label(
+    frameMeio,
+    text="Tabela Receitas e Despesas", 
+    padx=5,
+    anchor= NW, 
+    font=('Verdana 20'), 
+    bg=co1 , 
+    fg=co4
+    )
+label_title.place(x=5, y=300) 
+
+def mostrar_renda():
+    tabela_head = ['#Id','Categoria','Data','Quantia']
+
+    lista_itens = [[0,2,3,4],[0,2,3,4],[0,2,3,4],[0,2,3,4]]
+    
+    global tree
+
+    tree = ttk.Treeview(frame_renda, selectmode="extended",columns=tabela_head, show="headings")
+    #vertical scrollbar
+    vsb = ttk.Scrollbar(frame_renda, orient="vertical", command=tree.yview)
+    #horizontal scrollbar
+    hsb = ttk.Scrollbar(frame_renda, orient="horizontal", command=tree.xview)
+
+    tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+
+    tree.grid(column=0, row=0, sticky='nsew')
+    vsb.grid(column=1, row=0, sticky='ns')
+    hsb.grid(column=0, row=1, sticky='ew')
+
+    hd=["center","center","center", "center"]
+    h=[30,100,100,100]
+    n=0
+
+    for col in tabela_head:
+        tree.heading(col, text=col.title(), anchor=CENTER)
+        tree.column(col, width=h[n],anchor=hd[n])
+        
+        n+=1
+
+    for item in lista_itens:
+        tree.insert('', 'end', values=item)
+mostrar_renda()
+
 
 janela.mainloop()
