@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from tkinter import ttk , Tk
 from PIL import Image, ImageTk  # para rendenização de imagens
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -7,6 +8,7 @@ from matplotlib.figure import Figure
 from tkinter.ttk import Progressbar 
 from tkcalendar import calendar_, DateEntry
 from datetime import date
+from view import del_despesas, inserir_categoria, inserir_receitas, ver_categoria, ver_despesas
 
 co0 = "#2e2d2b"
 co1 = "#feffff"
@@ -31,6 +33,7 @@ janela.resizable(width=False , height=False)
 
 style = ttk.Style(janela)
 style.theme_use("clam")  # TEMA A SER USADO 
+
 
 # criando frames
 
@@ -63,6 +66,33 @@ frame_operacoes.grid(row=0, column=1, padx=5)
 
 frame_conf = Frame(frameBaixo, width=220, height=250, bg=co1)
 frame_conf.grid(row=0, column= 2, padx=5)
+
+global tree 
+def adicionar_categoria():
+    nome = categoria_rec.get()  # Obtém o valor do campo de entrada
+    
+    # Verifica se o campo está vazio
+    if nome == '':
+        messagebox.showerror('Erro', 'Insira uma categoria')
+        return
+
+    # Verifica se a categoria já foi inserida
+    if nome in categoria:
+        messagebox.showerror('Erro', 'Categoria já cadastrada')
+        return
+
+    # Adiciona a nova categoria à lista
+    categoria.append(nome)
+
+    # Limpa o campo de entrada
+    categoria_rec.delete(0, 'end')
+
+    # Atualiza o combobox com a lista de categorias
+    combo_categoria['values'] = categoria
+
+    # Exibe mensagem de sucesso
+    messagebox.showinfo('Sucesso', 'Categoria adicionada com sucesso')
+
 
 def porcentagem():
     l_nome = Label(frameMeio, text= "porcentagem da receita gasta".upper(), height=1, anchor=NW, font=("verdana 12"), bg= co1, fg= co4)
@@ -207,6 +237,8 @@ def mostrar_renda():
         tree.insert('', 'end', values=item)
 mostrar_renda()
 
+# labels do frame baixo  DESPESAS =======================================================================
+
 l_info = Label(frame_operacoes, text='Insira novas despesas', height=1, anchor= NW, font= ("verdana 12 bold"), bg=co1, fg=co4)
 l_info.place(x=10, y=10)
 
@@ -219,12 +251,16 @@ l_data.place(x=10, y=80)
 l_quantia = Label(frame_operacoes, text='Quantia(R$)', height=1, anchor=NW, font=("ivy 10"), bg=co1, fg=co4)
 l_quantia.place(x=10, y=120)
 
+l_deletar = Label(frame_operacoes, text='Excluir Ação', height=1, anchor=NW, font=("ivy 10"), bg=co1, fg=co4)
+l_deletar.place(x=10, y=190)
+
 categoria_funcao = ['viagem', 'Saúde']
 categoria= []
 for i in categoria_funcao:
-    categoria.append(i[1])  #pegando apenas valores exceto 'id
+    categoria.append(i[1])  #pegando apenas valores exceto 'id'
 
-# configuracao do combobox 
+# imputs =======================================================================================
+
 combo_categoria =ttk.Combobox(frame_operacoes, width=10, font= ('ivy 10'))
 combo_categoria['values'] = (categoria)
 combo_categoria.place(x=110, y=41)
@@ -235,16 +271,44 @@ combo_data.place(x=110, y=80)
 combo_quantia = Entry(frame_operacoes, width=14, justify='left', relief='solid')
 combo_quantia.place(x=110, y=120)
 
-#botao adicionar
+# icon adicionar
 icon_add = Image.open('add.png')
-icon_add = img.resize((17, 17))
+icon_add = icon_add.resize((17, 17))
 icon_add = ImageTk.PhotoImage(icon_add)
-
 btn_add = Button(frame_operacoes, image=icon_add, text="Adicionar".upper(), width= 80, compound= LEFT, anchor= NW, font=('Ivy 7 bold'), bg=co1 , fg=co0, overrelief=RIDGE)
-btn_add.place(x=110, y=160)
+btn_add.place(x=110, y=150)
+
+# icon deletar
+icon_delete = Image.open('delete.png')
+icon_delete = icon_delete.resize((17, 17))
+icon_delete = ImageTk.PhotoImage(icon_delete)
+btn_delete = Button(frame_operacoes, image=icon_delete, text="deletar".upper(), width= 80, compound= LEFT, anchor= NW, font=('Ivy 7 bold'), bg=co1 , fg=co0, overrelief=RIDGE)
+btn_delete.place(x=110, y=190)
 
 
+# labels do frame baixo  RECEITAS =======================================================================
+l_info_rec = Label(frame_conf, text='Insira novas receitas', height=1, anchor= NW, font= ("verdana 12 bold"), bg=co1, fg=co4)
+l_info_rec.place(x=10, y=10)
 
+l_data_rec = Label(frame_conf, text='Data', height=1, anchor=NW, font=("ivy 10"), bg=co1, fg=co4)
+l_data_rec.place(x=10, y=40)
+combo_data =DateEntry(frame_conf, width=12, background='darkblue', foreground='white', borderwidth=2, year=2024)
+combo_data.place(x=110, y=40)
 
+l_quantia_rec = Label(frame_conf, text='Quantia(R$)', height=1, anchor=NW, font=("ivy 10"), bg=co1, fg=co4)
+l_quantia_rec.place(x=10, y=80)
+combo_quantia_rec = Entry(frame_conf, width=14, justify='left', relief='solid')
+combo_quantia_rec.place(x=110, y=80)
+
+btn_add = Button(frame_conf, image=icon_add, text="Adicionar".upper(), width= 80, compound= LEFT, anchor= NW, font=('Ivy 7 bold'), bg=co1 , fg=co0, overrelief=RIDGE)
+btn_add.place(x=110, y=115)
+
+l_categoria = Label(frame_conf, text='Categoria', height=1, anchor=NW, font=("ivy 10 bold"), bg=co1, fg=co4)
+l_categoria.place(x=10, y=155)
+categoria_rec =Entry(frame_conf, width=14,justify= LEFT, relief='solid')
+categoria_rec.place(x=110, y=155)
+
+btn_add = Button(frame_conf,command=adicionar_categoria, image=icon_add, text="Adicionar".upper(), width= 80, compound= LEFT, anchor= NW, font=('Ivy 7 bold'), bg=co1 , fg=co0, overrelief=RIDGE)
+btn_add.place(x=110, y=185)
 
 janela.mainloop()
