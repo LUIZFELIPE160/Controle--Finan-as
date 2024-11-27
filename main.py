@@ -9,6 +9,9 @@ from tkinter.ttk import Progressbar
 from tkcalendar import calendar_, DateEntry
 from datetime import date
 from view import * #del_despesas, inserir_categoria, inserir_receitas, ver_categoria, ver_despesas
+import os
+
+PATH = os.path.dirname(os.path.realpath(__file__))  # Path to images
 
 co0 = "#2e2d2b"
 co1 = "#feffff"
@@ -37,7 +40,8 @@ frameCima = Frame(janela, width= 1043, height=50, bg=co1, relief="flat")
 frameCima.grid(row=0, column=0)
 
 #configuração do frame Cima 
-img = Image.open('img_log.png')
+img = Image.open(PATH + "/image/img_log.png")
+#img = Image.open('img_log.png')
 img = img.resize((45, 45))
 app_img = ImageTk.PhotoImage(img)
 
@@ -63,6 +67,8 @@ frame_conf = Frame(frameBaixo, width=220, height=250, bg=co1)
 frame_conf.grid(row=0, column= 2, padx=5)
 
 global tree 
+
+
 # dinamicidade ==================================================================
 def adicionar_categoria():
 
@@ -328,30 +334,32 @@ combo_categoria['values'] = (categoria)
 combo_categoria.place(x=110, y=41)
 
 l_data = Label(frame_operacoes, text='Data', height=1, anchor=NW, font=("ivy 10"), bg=co1, fg=co4)
-l_data.place(x=10, y=80)
+l_data.place(x=10, y=70)
 combo_data_desp =DateEntry(frame_operacoes, width=12, background='darkblue', foreground='white', borderwidth=2, year=2024)
-combo_data_desp.place(x=110, y=80)
+combo_data_desp.place(x=110, y=70)
 
 l_quantia = Label(frame_operacoes, text='Quantia(R$)', height=1, anchor=NW, font=("ivy 10"), bg=co1, fg=co4)
-l_quantia.place(x=10, y=120)
+l_quantia.place(x=10, y=100)
 combo_quantia_desp = Entry(frame_operacoes, width=14, justify='left', relief='solid')
-combo_quantia_desp.place(x=110, y=120)
+combo_quantia_desp.place(x=110, y=100)
 
 # icon adicionar
-icon_add = Image.open('img_add.png')
+icon_add = Image.open(PATH + "/image/img_add.png")
+#icon_add = Image.open('img_add.png')
 icon_add = icon_add.resize((17, 17))
 icon_add = ImageTk.PhotoImage(icon_add)
 
 btn_add_1 = Button(frame_operacoes,command=adicionar_despesas, image=icon_add, text="Adicionar".upper(), width= 80, compound= LEFT, anchor= NW, font=('Ivy 7 bold'), bg=co1 , fg=co0, overrelief=RIDGE)
-btn_add_1.place(x=110, y=150)
+btn_add_1.place(x=110, y=130)
 
-l_deletar = Label(frame_operacoes, text='Excluir Ação', height=1, anchor=NW, font=("ivy 10"), bg=co1, fg=co4)
-l_deletar.place(x=10, y=190)
-icon_delete = Image.open('img_delete.png')  # icon deletar
+l_deletar = Label(frame_operacoes, text='Excluir Ação', height=1, anchor=NW, font=("verdana 9 bold"), bg=co1, fg=co4)
+l_deletar.place(x=10, y=165)
+icon_delete = Image.open(PATH + "/image/img_delete.png")
+#icon_delete = Image.open('img_delete.png')  # icon deletar
 icon_delete = icon_delete.resize((17, 17))
 icon_delete = ImageTk.PhotoImage(icon_delete)
 btn_delete = Button(frame_operacoes,command=deletar_dados, image=icon_delete, text="deletar".upper(), width= 80, compound= LEFT, anchor= NW, font=('Ivy 7 bold'), bg=co1 , fg=co0, overrelief=RIDGE)
-btn_delete.place(x=110, y=190)
+btn_delete.place(x=10, y=195)
 
 # labels do frame baixo  RECEITAS =======================================================================
 l_info_rec = Label(frame_conf, text='Insira novas receitas', height=1, anchor= NW, font= ("verdana 12 bold"), bg=co1, fg=co4)
@@ -363,19 +371,22 @@ combo_data_rec =DateEntry(frame_conf, width=12, background='darkblue', foregroun
 combo_data_rec.place(x=110, y=40)
 
 l_quantia_rec = Label(frame_conf, text='Quantia(R$)', height=1, anchor=NW, font=("ivy 10"), bg=co1, fg=co4)
-l_quantia_rec.place(x=10, y=80)
+l_quantia_rec.place(x=10, y=70)
 combo_quantia_rec = Entry(frame_conf, width=14, justify='left', relief='solid')
-combo_quantia_rec.place(x=110, y=80)
+combo_quantia_rec.place(x=110, y=70)
 
 btn_add_2 = Button(frame_conf, command=adicionar_receitas, image=icon_add, text="Adicionar".upper(), width= 80, compound= LEFT, anchor= NW, font=('Ivy 7 bold'), bg=co1 , fg=co0, overrelief=RIDGE)
-btn_add_2.place(x=110, y=115)
+btn_add_2.place(x=110, y=95)
+
+l_info_categoria = Label(frame_conf, text='Insira nova categoria', height=1, anchor= NW, font= ("verdana 9 bold "), bg=co1, fg=co4)
+l_info_categoria.place(x=10, y=140)
 
 l_categoria = Label(frame_conf, text='Categoria', height=1, anchor=NW, font=("ivy 10 bold"), bg=co1, fg=co4)
-l_categoria.place(x=10, y=155)
+l_categoria.place(x=10, y=165)
 categoria_rec =Entry(frame_conf, width=14,justify= LEFT, relief='solid')
-categoria_rec.place(x=110, y=155)
+categoria_rec.place(x=110, y=165)
 
 btn_add_3 = Button(frame_conf,command=adicionar_categoria, image=icon_add, text="Adicionar".upper(), width= 80, compound= LEFT, anchor= NW, font=('Ivy 7 bold'), bg=co1 , fg=co0, overrelief=RIDGE)
-btn_add_3.place(x=110, y=185)
+btn_add_3.place(x=110, y=195)
 
 janela.mainloop()
